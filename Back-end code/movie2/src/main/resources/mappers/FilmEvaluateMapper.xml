@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie2.mapper.FilmEvaluateMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+	id,	fid,	uid,	star,	comment,	create_at
+	</sql>
+
+	<resultMap type="FilmEvaluate" id="baseMap">
+		<result column="id" property="id"/>
+		<result column="fid" property="fid"/>
+		<result column="uid" property="uid"/>
+		<result column="star" property="star"/>
+		<result column="comment" property="comment"/>
+		<result column="create_at" property="createAt"/>
+	</resultMap>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="baseMap" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_film_evaluate
+		 WHERE id = #{id}
+	</select>
+
+	<!-- 查询表中所有信息 -->
+	<select id="selectAllFilmEvaluates" resultMap="baseMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_film_evaluate order by  create_at desc
+	</select>
+
+	<!-- 查询Map符合条件的全部信息  -->
+	<select id="selectFilmEvaluatesCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_film_evaluate
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 查询Map符合条件的分页信息  -->
+	<select id="selectFilmEvaluatesPerPageByCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_film_evaluate
+	<!-- 条件自己写  -->
+		 limit ${start},#{size}
+	</select>
+
+	<!-- 查询所有获得记录条数 -->
+	<select id="selectFilmEvaluateCount" resultType="java.lang.Integer">
+		 SELECT
+		 count(1)
+		 FROM t_film_evaluate
+	</select>
+
+	<!-- 查询Map符合条件记录条数 -->
+	<select id="selectFilmEvaluatesCountByCondition" resultType="java.lang.Integer"  parameterType="map" >
+		 SELECT
+		 count(1)
+		 FROM t_film_evaluate
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 根据Bean条件查询匹配信息 -->
+	<select id="selectFilmEvaluatesByCondition" resultType="FilmEvaluate" parameterType="FilmEvaluate">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_film_evaluate
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="fid != null">
+				 and  fid = #{fid}
+			</if>
+			<if test="uid != null">
+				 and  uid = #{uid}
+			</if>
+			<if test="star != null">
+				 and  star = #{star}
+			</if>
+			<if test="comment != null">
+				 and  comment = #{comment}
+			</if>
+			<if test="createAt != null">
+				 and  create_at = #{createAt}
+			</if>
+		 </where> 
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		 DELETE FROM t_film_evaluate
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 删除：根据传入的对象内容，条件删除  -->
+	<delete id="deleteByCondition" parameterType="FilmEvaluate">
+		 DELETE FROM t_film_evaluate
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="fid != null">
+				 and  fid = #{fid}
+			</if>
+			<if test="uid != null">
+				 and  uid = #{uid}
+			</if>
+			<if test="star != null">
+				 and  star = #{star}
+			</if>
+			<if test="comment != null">
+				 and  comment = #{comment}
+			</if>
+			<if test="createAt != null">
+				 and  create_at = #{createAt}
+			</if>
+		 </where> 
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="FilmEvaluate">
+		 INSERT INTO t_film_evaluate
+ 		(id,fid,uid,star,comment,create_at) 
+		 VALUES 
+ 		(#{id},#{fid},#{uid},#{star},#{comment},now())
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="FilmEvaluate">
+		 INSERT INTO t_film_evaluate
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="fid != null">
+				 fid,
+			</if>
+			<if test="uid != null">
+				 uid,
+			</if>
+			<if test="star != null">
+				 star,
+			</if>
+			<if test="comment != null">
+				 comment,
+			</if>
+			<if test="createAt != null">
+				 create_at,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="fid!=null">
+				 #{fid},
+			</if>
+			<if test="uid!=null">
+				 #{uid},
+			</if>
+			<if test="star!=null">
+				 #{star},
+			</if>
+			<if test="comment!=null">
+				 #{comment},
+			</if>
+			<if test="createAt!=null">
+				 #{createAt},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="FilmEvaluate">
+		 UPDATE t_film_evaluate
+ 		 <set> 
+			<if test="fid != null">
+				 fid = #{fid},
+			</if>
+			<if test="uid != null">
+				 uid = #{uid},
+			</if>
+			<if test="star != null">
+				 star = #{star},
+			</if>
+			<if test="comment != null">
+				 comment = #{comment},
+			</if>
+			<if test="createAt != null">
+				 create_at = #{createAt},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="FilmEvaluate">
+		 UPDATE t_film_evaluate
+		 SET 
+			 fid = #{fid},
+			 uid = #{uid},
+			 star = #{star},
+			 comment = #{comment},
+			 create_at = #{createAt}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

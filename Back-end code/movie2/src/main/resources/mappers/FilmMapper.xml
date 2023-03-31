@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie2.mapper.FilmMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+	id,	name,	release_time,	type,	status,	region,	hot,	introduction,	cover,	duration,	is_delete,	create_time,	update_time
+	</sql>
+
+	<resultMap type="Film" id="baseMap">
+		<result column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="release_time" property="releaseTime"/>
+		<result column="type" property="type"/>
+		<result column="status" property="status"/>
+		<result column="region" property="region"/>
+		<result column="hot" property="hot"/>
+		<result column="introduction" property="introduction"/>
+		<result column="cover" property="cover"/>
+		<result column="duration" property="duration"/>
+		<result column="is_delete" property="isDelete"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	</resultMap>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="baseMap" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_film
+		 WHERE id = #{id}
+	</select>
+
+	<!-- 查询表中所有信息 -->
+	<select id="selectAllFilms" resultMap="baseMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_film
+	</select>
+
+	<!-- 查询Map符合条件的全部信息  -->
+	<select id="selectFilmsCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_film
+		 <where>
+			 <if test="area!=null">
+				and region = #{area}
+			 </if>
+			 <if test="type!=null">
+				 and type like concat('%',#{type},'%')
+			 </if>
+		 </where>
+	</select>
+
+	<!-- 查询Map符合条件的分页信息  -->
+	<select id="selectFilmsPerPageByCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_film
+	<!-- 条件自己写  -->
+		 limit ${start},#{size}
+	</select>
+
+	<!-- 查询所有获得记录条数 -->
+	<select id="selectFilmCount" resultType="java.lang.Integer">
+		 SELECT
+		 count(1)
+		 FROM t_film
+	</select>
+
+	<!-- 查询Map符合条件记录条数 -->
+	<select id="selectFilmsCountByCondition" resultType="java.lang.Integer"  parameterType="map" >
+		 SELECT
+		 count(1)
+		 FROM t_film
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 根据Bean条件查询匹配信息 -->
+	<select id="selectFilmsByCondition" resultType="Film" parameterType="Film">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_film
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="name != null">
+				 and  name like concat('%', #{name},'%')
+			</if>
+			<if test="releaseTime != null">
+				 and  release_time = #{releaseTime}
+			</if>
+			<if test="type != null">
+				 and  type = #{type}
+			</if>
+			<if test="status != null">
+				 and  status = #{status}
+			</if>
+			<if test="region != null">
+				 and  region = #{region}
+			</if>
+			<if test="hot != null">
+				 and  hot = #{hot}
+			</if>
+			<if test="introduction != null">
+				 and  introduction = #{introduction}
+			</if>
+			<if test="cover != null">
+				 and  cover = #{cover}
+			</if>
+			<if test="duration != null">
+				 and  duration = #{duration}
+			</if>
+			<if test="isDelete != null">
+				 and  is_delete = #{isDelete}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+		 </where> 
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		 DELETE FROM t_film
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 删除：根据传入的对象内容，条件删除  -->
+	<delete id="deleteByCondition" parameterType="Film">
+		 DELETE FROM t_film
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="name != null">
+				 and  name = #{name}
+			</if>
+			<if test="releaseTime != null">
+				 and  release_time = #{releaseTime}
+			</if>
+			<if test="type != null">
+				 and  type = #{type}
+			</if>
+			<if test="status != null">
+				 and  status = #{status}
+			</if>
+			<if test="region != null">
+				 and  region = #{region}
+			</if>
+			<if test="hot != null">
+				 and  hot = #{hot}
+			</if>
+			<if test="introduction != null">
+				 and  introduction = #{introduction}
+			</if>
+			<if test="cover != null">
+				 and  cover = #{cover}
+			</if>
+			<if test="duration != null">
+				 and  duration = #{duration}
+			</if>
+			<if test="isDelete != null">
+				 and  is_delete = #{isDelete}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+		 </where> 
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="Film">
+		 INSERT INTO t_film
+ 		(id,name,release_time,type,status,region,hot,introduction,cover,duration,is_delete,create_time,update_time) 
+		 VALUES 
+ 		(#{id},#{name},#{releaseTime},#{type},#{status},#{region},#{hot},#{introduction},#{cover},#{duration},#{isDelete},#{createTime},#{updateTime}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="Film">
+		 INSERT INTO t_film
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="name != null">
+				 name,
+			</if>
+			<if test="releaseTime != null">
+				 release_time,
+			</if>
+			<if test="type != null">
+				 type,
+			</if>
+			<if test="status != null">
+				 status,
+			</if>
+			<if test="region != null">
+				 region,
+			</if>
+			<if test="hot != null">
+				 hot,
+			</if>
+			<if test="introduction != null">
+				 introduction,
+			</if>
+			<if test="cover != null">
+				 cover,
+			</if>
+			<if test="duration != null">
+				 duration,
+			</if>
+			<if test="isDelete != null">
+				 is_delete,
+			</if>
+			<if test="createTime != null">
+				 create_time,
+			</if>
+			<if test="updateTime != null">
+				 update_time,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="name!=null">
+				 #{name},
+			</if>
+			<if test="releaseTime!=null">
+				 #{releaseTime},
+			</if>
+			<if test="type!=null">
+				 #{type},
+			</if>
+			<if test="status!=null">
+				 #{status},
+			</if>
+			<if test="region!=null">
+				 #{region},
+			</if>
+			<if test="hot!=null">
+				 #{hot},
+			</if>
+			<if test="introduction!=null">
+				 #{introduction},
+			</if>
+			<if test="cover!=null">
+				 #{cover},
+			</if>
+			<if test="duration!=null">
+				 #{duration},
+			</if>
+			<if test="isDelete!=null">
+				 #{isDelete},
+			</if>
+			<if test="createTime!=null">
+				 #{createTime},
+			</if>
+			<if test="updateTime!=null">
+				 #{updateTime},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="Film">
+		 UPDATE t_film
+ 		 <set> 
+			<if test="name != null">
+				 name = #{name},
+			</if>
+			<if test="releaseTime != null">
+				 release_time = #{releaseTime},
+			</if>
+			<if test="type != null">
+				 type = #{type},
+			</if>
+			<if test="status != null">
+				 status = #{status},
+			</if>
+			<if test="region != null">
+				 region = #{region},
+			</if>
+			<if test="hot != null">
+				 hot = #{hot},
+			</if>
+			<if test="introduction != null">
+				 introduction = #{introduction},
+			</if>
+			<if test="cover != null">
+				 cover = #{cover},
+			</if>
+			<if test="duration != null">
+				 duration = #{duration},
+			</if>
+			<if test="isDelete != null">
+				 is_delete = #{isDelete},
+			</if>
+			<if test="createTime != null">
+				 create_time = #{createTime},
+			</if>
+			<if test="updateTime != null">
+				 update_time = #{updateTime},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="Film">
+		 UPDATE t_film
+		 SET 
+			 name = #{name},
+			 release_time = #{releaseTime},
+			 type = #{type},
+			 status = #{status},
+			 region = #{region},
+			 hot = #{hot},
+			 introduction = #{introduction},
+			 cover = #{cover},
+			 duration = #{duration},
+			 is_delete = #{isDelete},
+			 create_time = #{createTime},
+			 update_time = #{updateTime}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

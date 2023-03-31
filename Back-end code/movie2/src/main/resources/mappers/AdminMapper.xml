@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie2.mapper.AdminMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+	id,	username,	password,	avatar
+	</sql>
+
+	<resultMap type="Admin" id="baseMap">
+		<result column="id" property="id"/>
+		<result column="username" property="username"/>
+		<result column="password" property="password"/>
+		<result column="avatar" property="avatar"/>
+	</resultMap>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="baseMap" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_admin
+		 WHERE id = #{id}
+	</select>
+
+	<!-- 查询表中所有信息 -->
+	<select id="selectAllAdmins" resultMap="baseMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_admin
+	</select>
+
+	<!-- 查询Map符合条件的全部信息  -->
+	<select id="selectAdminsCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_admin
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 查询Map符合条件的分页信息  -->
+	<select id="selectAdminsPerPageByCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_admin
+	<!-- 条件自己写  -->
+		 limit ${start},#{size}
+	</select>
+
+	<!-- 查询所有获得记录条数 -->
+	<select id="selectAdminCount" resultType="java.lang.Integer">
+		 SELECT
+		 count(1)
+		 FROM t_admin
+	</select>
+
+	<!-- 查询Map符合条件记录条数 -->
+	<select id="selectAdminsCountByCondition" resultType="java.lang.Integer"  parameterType="map" >
+		 SELECT
+		 count(1)
+		 FROM t_admin
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 根据Bean条件查询匹配信息 -->
+	<select id="selectAdminsByCondition" resultType="Admin" parameterType="Admin">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_admin
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="username != null">
+				 and  username = #{username}
+			</if>
+			<if test="password != null">
+				 and  password = #{password}
+			</if>
+			<if test="avatar != null">
+				 and  avatar = #{avatar}
+			</if>
+		 </where> 
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		 DELETE FROM t_admin
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 删除：根据传入的对象内容，条件删除  -->
+	<delete id="deleteByCondition" parameterType="Admin">
+		 DELETE FROM t_admin
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="username != null">
+				 and  username = #{username}
+			</if>
+			<if test="password != null">
+				 and  password = #{password}
+			</if>
+			<if test="avatar != null">
+				 and  avatar = #{avatar}
+			</if>
+		 </where> 
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="Admin">
+		 INSERT INTO t_admin
+ 		(id,username,password,avatar) 
+		 VALUES 
+ 		(#{id},#{username},#{password},#{avatar}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="Admin">
+		 INSERT INTO t_admin
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="username != null">
+				 username,
+			</if>
+			<if test="password != null">
+				 password,
+			</if>
+			<if test="avatar != null">
+				 avatar,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="username!=null">
+				 #{username},
+			</if>
+			<if test="password!=null">
+				 #{password},
+			</if>
+			<if test="avatar!=null">
+				 #{avatar},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="Admin">
+		 UPDATE t_admin
+ 		 <set> 
+			<if test="username != null">
+				 username = #{username},
+			</if>
+			<if test="password != null">
+				 password = #{password},
+			</if>
+			<if test="avatar != null">
+				 avatar = #{avatar},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="Admin">
+		 UPDATE t_admin
+		 SET 
+			 username = #{username},
+			 password = #{password},
+			 avatar = #{avatar}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

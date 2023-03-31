@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie2.mapper.WorkerMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+	id,	username,	password,	avatar,	nickname,	phone,	entry,	gender,	department,	create_time,	update_time
+	</sql>
+
+	<resultMap type="Worker" id="baseMap">
+		<result column="id" property="id"/>
+		<result column="username" property="username"/>
+		<result column="password" property="password"/>
+		<result column="avatar" property="avatar"/>
+		<result column="nickname" property="nickname"/>
+		<result column="phone" property="phone"/>
+		<result column="entry" property="entry"/>
+		<result column="gender" property="gender"/>
+		<result column="department" property="department"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	</resultMap>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="baseMap" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_worker
+		 WHERE id = #{id}
+	</select>
+
+	<!-- 查询表中所有信息 -->
+	<select id="selectAllWorkers" resultMap="baseMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_worker
+	</select>
+
+	<!-- 查询Map符合条件的全部信息  -->
+	<select id="selectWorkersCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_worker
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 查询Map符合条件的分页信息  -->
+	<select id="selectWorkersPerPageByCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_worker
+	<!-- 条件自己写  -->
+		 limit ${start},#{size}
+	</select>
+
+	<!-- 查询所有获得记录条数 -->
+	<select id="selectWorkerCount" resultType="java.lang.Integer">
+		 SELECT
+		 count(1)
+		 FROM t_worker
+	</select>
+
+	<!-- 查询Map符合条件记录条数 -->
+	<select id="selectWorkersCountByCondition" resultType="java.lang.Integer"  parameterType="map" >
+		 SELECT
+		 count(1)
+		 FROM t_worker
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 根据Bean条件查询匹配信息 -->
+	<select id="selectWorkersByCondition" resultType="Worker" parameterType="Worker">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_worker
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="username != null">
+				 and  username = #{username}
+			</if>
+			<if test="password != null">
+				 and  password = #{password}
+			</if>
+			<if test="avatar != null">
+				 and  avatar = #{avatar}
+			</if>
+			<if test="nickname != null">
+				 and  nickname = #{nickname}
+			</if>
+			<if test="phone != null">
+				 and  phone = #{phone}
+			</if>
+			<if test="entry != null">
+				 and  entry = #{entry}
+			</if>
+			<if test="gender != null">
+				 and  gender = #{gender}
+			</if>
+			<if test="department != null">
+				 and  department = #{department}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+		 </where> 
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		 DELETE FROM t_worker
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 删除：根据传入的对象内容，条件删除  -->
+	<delete id="deleteByCondition" parameterType="Worker">
+		 DELETE FROM t_worker
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="username != null">
+				 and  username = #{username}
+			</if>
+			<if test="password != null">
+				 and  password = #{password}
+			</if>
+			<if test="avatar != null">
+				 and  avatar = #{avatar}
+			</if>
+			<if test="nickname != null">
+				 and  nickname = #{nickname}
+			</if>
+			<if test="phone != null">
+				 and  phone = #{phone}
+			</if>
+			<if test="entry != null">
+				 and  entry = #{entry}
+			</if>
+			<if test="gender != null">
+				 and  gender = #{gender}
+			</if>
+			<if test="department != null">
+				 and  department = #{department}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+		 </where> 
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="Worker">
+		 INSERT INTO t_worker
+ 		(id,username,password,avatar,nickname,phone,entry,gender,department,create_time,update_time) 
+		 VALUES 
+ 		(#{id},#{username},#{password},#{avatar},#{nickname},#{phone},#{entry},#{gender},#{department},#{createTime},#{updateTime}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="Worker">
+		 INSERT INTO t_worker
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="username != null">
+				 username,
+			</if>
+			<if test="password != null">
+				 password,
+			</if>
+			<if test="avatar != null">
+				 avatar,
+			</if>
+			<if test="nickname != null">
+				 nickname,
+			</if>
+			<if test="phone != null">
+				 phone,
+			</if>
+			<if test="entry != null">
+				 entry,
+			</if>
+			<if test="gender != null">
+				 gender,
+			</if>
+			<if test="department != null">
+				 department,
+			</if>
+			<if test="createTime != null">
+				 create_time,
+			</if>
+			<if test="updateTime != null">
+				 update_time,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="username!=null">
+				 #{username},
+			</if>
+			<if test="password!=null">
+				 #{password},
+			</if>
+			<if test="avatar!=null">
+				 #{avatar},
+			</if>
+			<if test="nickname!=null">
+				 #{nickname},
+			</if>
+			<if test="phone!=null">
+				 #{phone},
+			</if>
+			<if test="entry!=null">
+				 #{entry},
+			</if>
+			<if test="gender!=null">
+				 #{gender},
+			</if>
+			<if test="department!=null">
+				 #{department},
+			</if>
+			<if test="createTime!=null">
+				 #{createTime},
+			</if>
+			<if test="updateTime!=null">
+				 #{updateTime},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="Worker">
+		 UPDATE t_worker
+ 		 <set> 
+			<if test="username != null">
+				 username = #{username},
+			</if>
+			<if test="password != null">
+				 password = #{password},
+			</if>
+			<if test="avatar != null">
+				 avatar = #{avatar},
+			</if>
+			<if test="nickname != null">
+				 nickname = #{nickname},
+			</if>
+			<if test="phone != null">
+				 phone = #{phone},
+			</if>
+			<if test="entry != null">
+				 entry = #{entry},
+			</if>
+			<if test="gender != null">
+				 gender = #{gender},
+			</if>
+			<if test="department != null">
+				 department = #{department},
+			</if>
+			<if test="createTime != null">
+				 create_time = #{createTime},
+			</if>
+			<if test="updateTime != null">
+				 update_time = #{updateTime},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="Worker">
+		 UPDATE t_worker
+		 SET 
+			 username = #{username},
+			 password = #{password},
+			 avatar = #{avatar},
+			 nickname = #{nickname},
+			 phone = #{phone},
+			 entry = #{entry},
+			 gender = #{gender},
+			 department = #{department},
+			 create_time = #{createTime},
+			 update_time = #{updateTime}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

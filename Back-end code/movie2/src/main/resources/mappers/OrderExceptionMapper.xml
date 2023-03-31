@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie2.mapper.OrderExceptionMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+	id,	oid,	reason,	status,	result,	reviewer,	create_at,	end_at
+	</sql>
+
+	<resultMap type="OrderException" id="baseMap">
+		<result column="id" property="id"/>
+		<result column="oid" property="oid"/>
+		<result column="reason" property="reason"/>
+		<result column="status" property="status"/>
+		<result column="result" property="result"/>
+		<result column="reviewer" property="reviewer"/>
+		<result column="create_at" property="createAt"/>
+		<result column="end_at" property="endAt"/>
+	</resultMap>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="baseMap" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_order_exception
+		 WHERE id = #{id}
+	</select>
+
+	<!-- 查询表中所有信息 -->
+	<select id="selectAllOrderExceptions" resultMap="baseMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_order_exception
+	</select>
+
+	<!-- 查询Map符合条件的全部信息  -->
+	<select id="selectOrderExceptionsCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_order_exception
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 查询Map符合条件的分页信息  -->
+	<select id="selectOrderExceptionsPerPageByCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_order_exception
+	<!-- 条件自己写  -->
+		 limit ${start},#{size}
+	</select>
+
+	<!-- 查询所有获得记录条数 -->
+	<select id="selectOrderExceptionCount" resultType="java.lang.Integer">
+		 SELECT
+		 count(1)
+		 FROM t_order_exception
+	</select>
+
+	<!-- 查询Map符合条件记录条数 -->
+	<select id="selectOrderExceptionsCountByCondition" resultType="java.lang.Integer"  parameterType="map" >
+		 SELECT
+		 count(1)
+		 FROM t_order_exception
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 根据Bean条件查询匹配信息 -->
+	<select id="selectOrderExceptionsByCondition" resultType="OrderException" parameterType="OrderException">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_order_exception
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="oid != null">
+				 and  oid = #{oid}
+			</if>
+			<if test="reason != null">
+				 and  reason = #{reason}
+			</if>
+			<if test="status != null">
+				 and  status = #{status}
+			</if>
+			<if test="result != null">
+				 and  result = #{result}
+			</if>
+			<if test="reviewer != null">
+				 and  reviewer = #{reviewer}
+			</if>
+			<if test="createAt != null">
+				 and  create_at = #{createAt}
+			</if>
+			<if test="endAt != null">
+				 and  end_at = #{endAt}
+			</if>
+		 </where> 
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		 DELETE FROM t_order_exception
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 删除：根据传入的对象内容，条件删除  -->
+	<delete id="deleteByCondition" parameterType="OrderException">
+		 DELETE FROM t_order_exception
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="oid != null">
+				 and  oid = #{oid}
+			</if>
+			<if test="reason != null">
+				 and  reason = #{reason}
+			</if>
+			<if test="status != null">
+				 and  status = #{status}
+			</if>
+			<if test="result != null">
+				 and  result = #{result}
+			</if>
+			<if test="reviewer != null">
+				 and  reviewer = #{reviewer}
+			</if>
+			<if test="createAt != null">
+				 and  create_at = #{createAt}
+			</if>
+			<if test="endAt != null">
+				 and  end_at = #{endAt}
+			</if>
+		 </where> 
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="OrderException">
+		 INSERT INTO t_order_exception
+ 		(id,oid,reason,status,result,reviewer,create_at,end_at) 
+		 VALUES 
+ 		(#{id},#{oid},#{reason},#{status},#{result},#{reviewer},#{createAt},#{endAt}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="OrderException">
+		 INSERT INTO t_order_exception
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="oid != null">
+				 oid,
+			</if>
+			<if test="reason != null">
+				 reason,
+			</if>
+			<if test="status != null">
+				 status,
+			</if>
+			<if test="result != null">
+				 result,
+			</if>
+			<if test="reviewer != null">
+				 reviewer,
+			</if>
+			<if test="createAt != null">
+				 create_at,
+			</if>
+			<if test="endAt != null">
+				 end_at,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="oid!=null">
+				 #{oid},
+			</if>
+			<if test="reason!=null">
+				 #{reason},
+			</if>
+			<if test="status!=null">
+				 #{status},
+			</if>
+			<if test="result!=null">
+				 #{result},
+			</if>
+			<if test="reviewer!=null">
+				 #{reviewer},
+			</if>
+			<if test="createAt!=null">
+				 #{createAt},
+			</if>
+			<if test="endAt!=null">
+				 #{endAt},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="OrderException">
+		 UPDATE t_order_exception
+ 		 <set> 
+			<if test="oid != null">
+				 oid = #{oid},
+			</if>
+			<if test="reason != null">
+				 reason = #{reason},
+			</if>
+			<if test="status != null">
+				 status = #{status},
+			</if>
+			<if test="result != null">
+				 result = #{result},
+			</if>
+			<if test="reviewer != null">
+				 reviewer = #{reviewer},
+			</if>
+			<if test="createAt != null">
+				 create_at = #{createAt},
+			</if>
+			<if test="endAt != null">
+				 end_at = #{endAt},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="OrderException">
+		 UPDATE t_order_exception
+		 SET 
+			 oid = #{oid},
+			 reason = #{reason},
+			 status = #{status},
+			 result = #{result},
+			 reviewer = #{reviewer},
+			 create_at = #{createAt},
+			 end_at = #{endAt}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

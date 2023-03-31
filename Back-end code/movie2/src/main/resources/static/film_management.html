@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>显示所有电影信息</h2>
+<table id="show" border="1">
+    <thead>
+    <tr><td>id</td><td>name</td><td>图片</td><td>上映时间</td><td>操作</td></tr>
+    </thead>
+    <tbody id="myBody">
+        <tr><td>id</td><td>name</td><td>username</td><td>操作</td></tr>
+    </tbody>
+    <tfoot>
+
+    </tfoot>
+</table>
+<hr />
+<script src="js/jquery.min.js"></script>
+<script src="js/util.js"></script>
+<script>
+$(function(){
+    //element-ui
+    //https://element.eleme.cn/#/zh-CN
+    //如何解决Vue无法显示网络图片的问题
+    //https://blog.csdn.net/weixin_44932487/article/details/119855512
+    var table=document.getElementById("show");
+    //获得所有电影信息
+    myAjax("/api/film","","",null,function (data) {
+        //console.log(data.data);
+        var films = data.data;
+
+        var str = "";
+        for(var i = 0;i<films.length;i++){
+            var date="/Date("+films[i].releaseTime+")/";
+            str+="<tr><td>"+films[i].id+"</td><td>"+films[i].name+"</td><td><img height='40px' src='"+films[i].cover+"'></td><td>"+
+                getDateTime(ConvertJSONDateToJSDate(date))+"</td><td>操作</td></tr>"
+        }
+        $("#myBody").html(str);
+       // <tr><td>id</td><td>name</td><td>username</td><td>操作</td></tr>
+        //var date="/Date("+data.data[0].releaseTime+")/";
+        //console.log(getDateTime(ConvertJSONDateToJSDate(date)))
+
+
+        // var dt = '/Date(1436595149269)/';
+        // var formatTime1 = convertTime(dt, "yyyy-MM-dd hh:mm:ss");//2015-07-11 14:12:29
+        // $("#div1").text(formatTime1);
+        // var formatTime2 = convertTime(dt, "yyyy年MM月dd日 hh时mm分ss秒");//2015年07月11日 14时12分29秒
+        // $("#div2").text(formatTime2);
+    })
+})
+</script>
+</body>
+</html>

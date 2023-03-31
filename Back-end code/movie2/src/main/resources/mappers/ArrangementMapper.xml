@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie2.mapper.ArrangementMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+	id,	fid,	name,	seat_number,	box_office,	price,	type,	date,	start_time,	end_time,	founder,	create_time,	update_time
+	</sql>
+
+	<resultMap type="Arrangement" id="baseMap">
+		<result column="id" property="id"/>
+		<result column="fid" property="fid"/>
+		<result column="name" property="name"/>
+		<result column="seat_number" property="seatNumber"/>
+		<result column="box_office" property="boxOffice"/>
+		<result column="price" property="price"/>
+		<result column="type" property="type"/>
+		<result column="date" property="date"/>
+		<result column="start_time" property="startTime"/>
+		<result column="end_time" property="endTime"/>
+		<result column="founder" property="founder"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	</resultMap>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="baseMap" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_arrangement
+		 WHERE id = #{id}
+	</select>
+
+	<!-- 查询表中所有信息 -->
+	<select id="selectAllArrangements" resultMap="baseMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_arrangement
+	</select>
+
+	<!-- 查询Map符合条件的全部信息  -->
+	<select id="selectArrangementsCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_arrangement
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 查询Map符合条件的分页信息  -->
+	<select id="selectArrangementsPerPageByCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_arrangement
+	<!-- 条件自己写  -->
+		 limit ${start},#{size}
+	</select>
+
+	<!-- 查询所有获得记录条数 -->
+	<select id="selectArrangementCount" resultType="java.lang.Integer">
+		 SELECT
+		 count(1)
+		 FROM t_arrangement
+	</select>
+
+	<!-- 查询Map符合条件记录条数 -->
+	<select id="selectArrangementsCountByCondition" resultType="java.lang.Integer"  parameterType="map" >
+		 SELECT
+		 count(1)
+		 FROM t_arrangement
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 根据Bean条件查询匹配信息 -->
+	<select id="selectArrangementsByCondition" resultType="Arrangement" parameterType="Arrangement">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_arrangement
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="fid != null">
+				 and  fid = #{fid}
+			</if>
+			<if test="name != null">
+				 and  name = #{name}
+			</if>
+			<if test="seatNumber != null">
+				 and  seat_number = #{seatNumber}
+			</if>
+			<if test="boxOffice != null">
+				 and  box_office = #{boxOffice}
+			</if>
+			<if test="price != null">
+				 and  price = #{price}
+			</if>
+			<if test="type != null">
+				 and  type  #{type}
+			</if>
+			<if test="date != null">
+				 and  date >= now()
+			</if>
+			<if test="startTime != null">
+				 and  start_time = #{startTime}
+			</if>
+			<if test="endTime != null">
+				 and  end_time = #{endTime}
+			</if>
+			<if test="founder != null">
+				 and  founder = #{founder}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+		 </where> 
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		 DELETE FROM t_arrangement
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 删除：根据传入的对象内容，条件删除  -->
+	<delete id="deleteByCondition" parameterType="Arrangement">
+		 DELETE FROM t_arrangement
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="fid != null">
+				 and  fid = #{fid}
+			</if>
+			<if test="name != null">
+				 and  name = #{name}
+			</if>
+			<if test="seatNumber != null">
+				 and  seat_number = #{seatNumber}
+			</if>
+			<if test="boxOffice != null">
+				 and  box_office = #{boxOffice}
+			</if>
+			<if test="price != null">
+				 and  price = #{price}
+			</if>
+			<if test="type != null">
+				 and  type = #{type}
+			</if>
+			<if test="date != null">
+				 and  date = #{date}
+			</if>
+			<if test="startTime != null">
+				 and  start_time = #{startTime}
+			</if>
+			<if test="endTime != null">
+				 and  end_time = #{endTime}
+			</if>
+			<if test="founder != null">
+				 and  founder = #{founder}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+		 </where> 
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="Arrangement">
+		 INSERT INTO t_arrangement
+ 		(id,fid,name,seat_number,box_office,price,type,date,start_time,end_time,founder,create_time,update_time) 
+		 VALUES 
+ 		(#{id},#{fid},#{name},#{seatNumber},#{boxOffice},#{price},#{type},#{date},#{startTime},#{endTime},#{founder},#{createTime},#{updateTime}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="Arrangement">
+		 INSERT INTO t_arrangement
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="fid != null">
+				 fid,
+			</if>
+			<if test="name != null">
+				 name,
+			</if>
+			<if test="seatNumber != null">
+				 seat_number,
+			</if>
+			<if test="boxOffice != null">
+				 box_office,
+			</if>
+			<if test="price != null">
+				 price,
+			</if>
+			<if test="type != null">
+				 type,
+			</if>
+			<if test="date != null">
+				 date,
+			</if>
+			<if test="startTime != null">
+				 start_time,
+			</if>
+			<if test="endTime != null">
+				 end_time,
+			</if>
+			<if test="founder != null">
+				 founder,
+			</if>
+			<if test="createTime != null">
+				 create_time,
+			</if>
+			<if test="updateTime != null">
+				 update_time,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="fid!=null">
+				 #{fid},
+			</if>
+			<if test="name!=null">
+				 #{name},
+			</if>
+			<if test="seatNumber!=null">
+				 #{seatNumber},
+			</if>
+			<if test="boxOffice!=null">
+				 #{boxOffice},
+			</if>
+			<if test="price!=null">
+				 #{price},
+			</if>
+			<if test="type!=null">
+				 #{type},
+			</if>
+			<if test="date!=null">
+				 #{date},
+			</if>
+			<if test="startTime!=null">
+				 #{startTime},
+			</if>
+			<if test="endTime!=null">
+				 #{endTime},
+			</if>
+			<if test="founder!=null">
+				 #{founder},
+			</if>
+			<if test="createTime!=null">
+				 #{createTime},
+			</if>
+			<if test="updateTime!=null">
+				 #{updateTime},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="Arrangement">
+		 UPDATE t_arrangement
+ 		 <set> 
+			<if test="fid != null">
+				 fid = #{fid},
+			</if>
+			<if test="name != null">
+				 name = #{name},
+			</if>
+			<if test="seatNumber != null">
+				 seat_number = #{seatNumber},
+			</if>
+			<if test="boxOffice != null">
+				 box_office = #{boxOffice},
+			</if>
+			<if test="price != null">
+				 price = #{price},
+			</if>
+			<if test="type != null">
+				 type = #{type},
+			</if>
+			<if test="date != null">
+				 date = #{date},
+			</if>
+			<if test="startTime != null">
+				 start_time = #{startTime},
+			</if>
+			<if test="endTime != null">
+				 end_time = #{endTime},
+			</if>
+			<if test="founder != null">
+				 founder = #{founder},
+			</if>
+			<if test="createTime != null">
+				 create_time = #{createTime},
+			</if>
+			<if test="updateTime != null">
+				 update_time = #{updateTime},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="Arrangement">
+		 UPDATE t_arrangement
+		 SET 
+			 fid = #{fid},
+			 name = #{name},
+			 seat_number = #{seatNumber},
+			 box_office = #{boxOffice},
+			 price = #{price},
+			 type = #{type},
+			 date = #{date},
+			 start_time = #{startTime},
+			 end_time = #{endTime},
+			 founder = #{founder},
+			 create_time = #{createTime},
+			 update_time = #{updateTime}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

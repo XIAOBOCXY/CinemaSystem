@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie2.mapper.RegistrationMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+	id,	aid,	uid,	create_time,	update_time
+	</sql>
+
+	<resultMap type="Registration" id="baseMap">
+		<result column="id" property="id"/>
+		<result column="aid" property="aid"/>
+		<result column="uid" property="uid"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	</resultMap>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="baseMap" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_registration
+		 WHERE id = #{id}
+	</select>
+
+	<!-- 查询表中所有信息 -->
+	<select id="selectAllRegistrations" resultMap="baseMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_registration
+	</select>
+
+	<!-- 查询Map符合条件的全部信息  -->
+	<select id="selectRegistrationsCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_registration
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 查询Map符合条件的分页信息  -->
+	<select id="selectRegistrationsPerPageByCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_registration
+	<!-- 条件自己写  -->
+		 limit ${start},#{size}
+	</select>
+
+	<!-- 查询所有获得记录条数 -->
+	<select id="selectRegistrationCount" resultType="java.lang.Integer">
+		 SELECT
+		 count(1)
+		 FROM t_registration
+	</select>
+
+	<!-- 查询Map符合条件记录条数 -->
+	<select id="selectRegistrationsCountByCondition" resultType="java.lang.Integer"  parameterType="map" >
+		 SELECT
+		 count(1)
+		 FROM t_registration
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 根据Bean条件查询匹配信息 -->
+	<select id="selectRegistrationsByCondition" resultType="Registration" parameterType="Registration">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_registration
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="aid != null">
+				 and  aid = #{aid}
+			</if>
+			<if test="uid != null">
+				 and  uid = #{uid}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+		 </where> 
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		 DELETE FROM t_registration
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 删除：根据传入的对象内容，条件删除  -->
+	<delete id="deleteByCondition" parameterType="Registration">
+		 DELETE FROM t_registration
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="aid != null">
+				 and  aid = #{aid}
+			</if>
+			<if test="uid != null">
+				 and  uid = #{uid}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+		 </where> 
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="Registration">
+		 INSERT INTO t_registration
+ 		(id,aid,uid,create_time,update_time) 
+		 VALUES 
+ 		(null,#{aid},#{uid},now(),now())
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="Registration">
+		 INSERT INTO t_registration
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="aid != null">
+				 aid,
+			</if>
+			<if test="uid != null">
+				 uid,
+			</if>
+			<if test="createTime != null">
+				 create_time,
+			</if>
+			<if test="updateTime != null">
+				 update_time,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="aid!=null">
+				 #{aid},
+			</if>
+			<if test="uid!=null">
+				 #{uid},
+			</if>
+			<if test="createTime!=null">
+				 #{createTime},
+			</if>
+			<if test="updateTime!=null">
+				 #{updateTime},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="Registration">
+		 UPDATE t_registration
+ 		 <set> 
+			<if test="aid != null">
+				 aid = #{aid},
+			</if>
+			<if test="uid != null">
+				 uid = #{uid},
+			</if>
+			<if test="createTime != null">
+				 create_time = #{createTime},
+			</if>
+			<if test="updateTime != null">
+				 update_time = #{updateTime},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="Registration">
+		 UPDATE t_registration
+		 SET 
+			 aid = #{aid},
+			 uid = #{uid},
+			 create_time = #{createTime},
+			 update_time = #{updateTime}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

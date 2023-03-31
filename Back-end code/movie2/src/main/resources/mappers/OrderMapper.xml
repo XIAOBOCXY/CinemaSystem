@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie2.mapper.OrderMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+	id,	uid,	phone,	aid,	seats,	price,	status,	pay_at,	create_time,	update_time
+	</sql>
+
+	<resultMap type="Order" id="baseMap">
+		<result column="id" property="id"/>
+		<result column="uid" property="uid"/>
+		<result column="phone" property="phone"/>
+		<result column="aid" property="aid"/>
+		<result column="seats" property="seats"/>
+		<result column="price" property="price"/>
+		<result column="status" property="status"/>
+		<result column="pay_at" property="payAt"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	</resultMap>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="baseMap" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_order
+		 WHERE id = #{id}
+	</select>
+
+	<!-- 查询表中所有信息 -->
+	<select id="selectAllOrders" resultMap="baseMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_order
+	</select>
+
+	<!-- 查询Map符合条件的全部信息  -->
+	<select id="selectOrdersCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_order
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 查询Map符合条件的分页信息  -->
+	<select id="selectOrdersPerPageByCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_order
+	<!-- 条件自己写  -->
+		 limit ${start},#{size}
+	</select>
+
+	<!-- 查询所有获得记录条数 -->
+	<select id="selectOrderCount" resultType="java.lang.Integer">
+		 SELECT
+		 count(1)
+		 FROM t_order
+	</select>
+
+	<!-- 查询Map符合条件记录条数 -->
+	<select id="selectOrdersCountByCondition" resultType="java.lang.Integer"  parameterType="map" >
+		 SELECT
+		 count(1)
+		 FROM t_order
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 根据Bean条件查询匹配信息 -->
+	<select id="selectOrdersByCondition" resultType="Order" parameterType="Order">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_order
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="uid != null">
+				 and  uid = #{uid}
+			</if>
+			<if test="phone != null">
+				 and  phone = #{phone}
+			</if>
+			<if test="aid != null">
+				 and  aid = #{aid}
+			</if>
+			<if test="seats != null">
+				 and  seats = #{seats}
+			</if>
+			<if test="price != null">
+				 and  price = #{price}
+			</if>
+			<if test="status != null">
+				 and  status = #{status}
+			</if>
+			<if test="payAt != null">
+				 and  pay_at = #{payAt}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+		 </where> 
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		 DELETE FROM t_order
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 删除：根据传入的对象内容，条件删除  -->
+	<delete id="deleteByCondition" parameterType="Order">
+		 DELETE FROM t_order
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="uid != null">
+				 and  uid = #{uid}
+			</if>
+			<if test="phone != null">
+				 and  phone = #{phone}
+			</if>
+			<if test="aid != null">
+				 and  aid = #{aid}
+			</if>
+			<if test="seats != null">
+				 and  seats = #{seats}
+			</if>
+			<if test="price != null">
+				 and  price = #{price}
+			</if>
+			<if test="status != null">
+				 and  status = #{status}
+			</if>
+			<if test="payAt != null">
+				 and  pay_at = #{payAt}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+		 </where> 
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="Order">
+		 INSERT INTO t_order
+ 		(id,uid,phone,aid,seats,price,status,pay_at,create_time,update_time) 
+		 VALUES 
+ 		(null,#{uid},#{phone},#{aid},#{seats},#{price},#{status},null,now(),now())
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="Order">
+		 INSERT INTO t_order
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="uid != null">
+				 uid,
+			</if>
+			<if test="phone != null">
+				 phone,
+			</if>
+			<if test="aid != null">
+				 aid,
+			</if>
+			<if test="seats != null">
+				 seats,
+			</if>
+			<if test="price != null">
+				 price,
+			</if>
+			<if test="status != null">
+				 status,
+			</if>
+			<if test="payAt != null">
+				 pay_at,
+			</if>
+			<if test="createTime != null">
+				 create_time,
+			</if>
+			<if test="updateTime != null">
+				 update_time,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="uid!=null">
+				 #{uid},
+			</if>
+			<if test="phone!=null">
+				 #{phone},
+			</if>
+			<if test="aid!=null">
+				 #{aid},
+			</if>
+			<if test="seats!=null">
+				 #{seats},
+			</if>
+			<if test="price!=null">
+				 #{price},
+			</if>
+			<if test="status!=null">
+				 #{status},
+			</if>
+			<if test="payAt!=null">
+				 #{payAt},
+			</if>
+			<if test="createTime!=null">
+				 #{createTime},
+			</if>
+			<if test="updateTime!=null">
+				 #{updateTime},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="Order">
+		 UPDATE t_order
+ 		 <set> 
+			<if test="uid != null">
+				 uid = #{uid},
+			</if>
+			<if test="phone != null">
+				 phone = #{phone},
+			</if>
+			<if test="aid != null">
+				 aid = #{aid},
+			</if>
+			<if test="seats != null">
+				 seats = #{seats},
+			</if>
+			<if test="price != null">
+				 price = #{price},
+			</if>
+			<if test="status != null">
+				 status = #{status},
+			</if>
+			<if test="payAt != null">
+				 pay_at = #{payAt},
+			</if>
+			<if test="createTime != null">
+				 create_time = #{createTime},
+			</if>
+			<if test="updateTime != null">
+				 update_time = #{updateTime},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="Order">
+		 UPDATE t_order
+		 SET 
+			 uid = #{uid},
+			 phone = #{phone},
+			 aid = #{aid},
+			 seats = #{seats},
+			 price = #{price},
+			 status = #{status},
+			 pay_at = #{payAt},
+			 create_time = #{createTime},
+			 update_time = #{updateTime}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

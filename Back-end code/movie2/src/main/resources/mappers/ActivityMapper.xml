@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie2.mapper.ActivityMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+	id,	content,	number,	start_time,	end_time,	create_time,	update_time
+	</sql>
+
+	<resultMap type="Activity" id="baseMap">
+		<result column="id" property="id"/>
+		<result column="content" property="content"/>
+		<result column="number" property="number"/>
+		<result column="start_time" property="startTime"/>
+		<result column="end_time" property="endTime"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	</resultMap>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="baseMap" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_activity
+		 WHERE id = #{id}
+	</select>
+
+	<!-- 查询表中所有信息 -->
+	<select id="selectAllActivitys" resultMap="baseMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_activity
+	</select>
+
+	<!-- 查询Map符合条件的全部信息  -->
+	<select id="selectActivitysCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_activity
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 查询Map符合条件的分页信息  -->
+	<select id="selectActivitysPerPageByCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_activity
+	<!-- 条件自己写  -->
+		 limit ${start},#{size}
+	</select>
+
+	<!-- 查询所有获得记录条数 -->
+	<select id="selectActivityCount" resultType="java.lang.Integer">
+		 SELECT
+		 count(1)
+		 FROM t_activity
+	</select>
+
+	<!-- 查询Map符合条件记录条数 -->
+	<select id="selectActivitysCountByCondition" resultType="java.lang.Integer"  parameterType="map" >
+		 SELECT
+		 count(1)
+		 FROM t_activity
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 根据Bean条件查询匹配信息 -->
+	<select id="selectActivitysByCondition" resultType="Activity" parameterType="Activity">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_activity
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="content != null">
+				 and  content = #{content}
+			</if>
+			<if test="number != null">
+				 and  number = #{number}
+			</if>
+			<if test="startTime != null">
+				 and  start_time = #{startTime}
+			</if>
+			<if test="endTime != null">
+				 and  end_time = #{endTime}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+		 </where> 
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		 DELETE FROM t_activity
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 删除：根据传入的对象内容，条件删除  -->
+	<delete id="deleteByCondition" parameterType="Activity">
+		 DELETE FROM t_activity
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="content != null">
+				 and  content = #{content}
+			</if>
+			<if test="number != null">
+				 and  number = #{number}
+			</if>
+			<if test="startTime != null">
+				 and  start_time = #{startTime}
+			</if>
+			<if test="endTime != null">
+				 and  end_time = #{endTime}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+		 </where> 
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="Activity">
+		 INSERT INTO t_activity
+ 		(id,content,number,start_time,end_time,create_time,update_time) 
+		 VALUES 
+ 		(#{id},#{content},#{number},#{startTime},#{endTime},#{createTime},#{updateTime}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="Activity">
+		 INSERT INTO t_activity
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="content != null">
+				 content,
+			</if>
+			<if test="number != null">
+				 number,
+			</if>
+			<if test="startTime != null">
+				 start_time,
+			</if>
+			<if test="endTime != null">
+				 end_time,
+			</if>
+			<if test="createTime != null">
+				 create_time,
+			</if>
+			<if test="updateTime != null">
+				 update_time,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="content!=null">
+				 #{content},
+			</if>
+			<if test="number!=null">
+				 #{number},
+			</if>
+			<if test="startTime!=null">
+				 #{startTime},
+			</if>
+			<if test="endTime!=null">
+				 #{endTime},
+			</if>
+			<if test="createTime!=null">
+				 #{createTime},
+			</if>
+			<if test="updateTime!=null">
+				 #{updateTime},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="Activity">
+		 UPDATE t_activity
+ 		 <set> 
+			<if test="content != null">
+				 content = #{content},
+			</if>
+			<if test="number != null">
+				 number = #{number},
+			</if>
+			<if test="startTime != null">
+				 start_time = #{startTime},
+			</if>
+			<if test="endTime != null">
+				 end_time = #{endTime},
+			</if>
+			<if test="createTime != null">
+				 create_time = #{createTime},
+			</if>
+			<if test="updateTime != null">
+				 update_time = #{updateTime},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="Activity">
+		 UPDATE t_activity
+		 SET 
+			 content = #{content},
+			 number = #{number},
+			 start_time = #{startTime},
+			 end_time = #{endTime},
+			 create_time = #{createTime},
+			 update_time = #{updateTime}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

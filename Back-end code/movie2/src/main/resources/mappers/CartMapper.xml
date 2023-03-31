@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie2.mapper.CartMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+	id,	uid,	aid,	status,	phone,	seats,	price,	create_time,	update_time
+	</sql>
+
+	<resultMap type="Cart" id="baseMap">
+		<result column="id" property="id"/>
+		<result column="uid" property="uid"/>
+		<result column="aid" property="aid"/>
+		<result column="status" property="status"/>
+		<result column="phone" property="phone"/>
+		<result column="seats" property="seats"/>
+		<result column="price" property="price"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	</resultMap>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="baseMap" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_cart
+		 WHERE id = #{id}
+	</select>
+
+	<!-- 查询表中所有信息 -->
+	<select id="selectAllCarts" resultMap="baseMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_cart
+	</select>
+	<!--批量查询购物车项信息-->
+	<select id="selectAllCartsByIds" parameterType="list" resultMap="baseMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_cart
+		where id in
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+
+	<!-- 查询Map符合条件的全部信息  -->
+	<select id="selectCartsCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_cart
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 查询Map符合条件的分页信息  -->
+	<select id="selectCartsPerPageByCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_cart
+	<!-- 条件自己写  -->
+		 limit ${start},#{size}
+	</select>
+
+	<!-- 查询所有获得记录条数 -->
+	<select id="selectCartCount" resultType="java.lang.Integer">
+		 SELECT
+		 count(1)
+		 FROM t_cart
+	</select>
+
+	<!-- 查询Map符合条件记录条数 -->
+	<select id="selectCartsCountByCondition" resultType="java.lang.Integer"  parameterType="map" >
+		 SELECT
+		 count(1)
+		 FROM t_cart
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 根据Bean条件查询匹配信息 -->
+	<select id="selectCartsByCondition" resultType="Cart" parameterType="Cart">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_cart
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="uid != null">
+				 and  uid = #{uid}
+			</if>
+			<if test="aid != null">
+				 and  aid = #{aid}
+			</if>
+			<if test="status != null">
+				 and  status = #{status}
+			</if>
+			<if test="phone != null">
+				 and  phone = #{phone}
+			</if>
+			<if test="seats != null">
+				 and  seats = #{seats}
+			</if>
+			<if test="price != null">
+				 and  price = #{price}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+		 </where> 
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		 DELETE FROM t_cart
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 删除：根据传入的对象内容，条件删除  -->
+	<delete id="deleteByCondition" parameterType="Cart">
+		 DELETE FROM t_cart
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="uid != null">
+				 and  uid = #{uid}
+			</if>
+			<if test="aid != null">
+				 and  aid = #{aid}
+			</if>
+			<if test="status != null">
+				 and  status = #{status}
+			</if>
+			<if test="phone != null">
+				 and  phone = #{phone}
+			</if>
+			<if test="seats != null">
+				 and  seats = #{seats}
+			</if>
+			<if test="price != null">
+				 and  price = #{price}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+		 </where> 
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="Cart">
+		 INSERT INTO t_cart
+ 		(id,uid,aid,status,phone,seats,price,create_time,update_time) 
+		 VALUES 
+ 		(null,#{uid},#{aid},#{status},#{phone},#{seats},#{price},now(),now())
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="Cart">
+		 INSERT INTO t_cart
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="uid != null">
+				 uid,
+			</if>
+			<if test="aid != null">
+				 aid,
+			</if>
+			<if test="status != null">
+				 status,
+			</if>
+			<if test="phone != null">
+				 phone,
+			</if>
+			<if test="seats != null">
+				 seats,
+			</if>
+			<if test="price != null">
+				 price,
+			</if>
+			<if test="createTime != null">
+				 create_time,
+			</if>
+			<if test="updateTime != null">
+				 update_time,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="uid!=null">
+				 #{uid},
+			</if>
+			<if test="aid!=null">
+				 #{aid},
+			</if>
+			<if test="status!=null">
+				 #{status},
+			</if>
+			<if test="phone!=null">
+				 #{phone},
+			</if>
+			<if test="seats!=null">
+				 #{seats},
+			</if>
+			<if test="price!=null">
+				 #{price},
+			</if>
+			<if test="createTime!=null">
+				 #{createTime},
+			</if>
+			<if test="updateTime!=null">
+				 #{updateTime},
+			</if>
+		 </trim>
+	</insert>
+
+	<update id="updateStatusByIds" parameterType="map">
+		update  t_cart set status=#{status}
+		where  id in
+		<foreach collection="array" item="id" separator="," open="(" close=")">
+			#{id}
+		</foreach>
+
+	</update>
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="Cart">
+		 UPDATE t_cart
+ 		 <set> 
+			<if test="uid != null">
+				 uid = #{uid},
+			</if>
+			<if test="aid != null">
+				 aid = #{aid},
+			</if>
+			<if test="status != null">
+				 status = #{status},
+			</if>
+			<if test="phone != null">
+				 phone = #{phone},
+			</if>
+			<if test="seats != null">
+				 seats = #{seats},
+			</if>
+			<if test="price != null">
+				 price = #{price},
+			</if>
+			<if test="createTime != null">
+				 create_time = #{createTime},
+			</if>
+			<if test="updateTime != null">
+				 update_time = #{updateTime},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="Cart">
+		 UPDATE t_cart
+		 SET 
+			 uid = #{uid},
+			 aid = #{aid},
+			 status = #{status},
+			 phone = #{phone},
+			 seats = #{seats},
+			 price = #{price},
+			 create_time = #{createTime},
+			 update_time = #{updateTime}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie2.mapper.SeatMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+	id,	aid,	seat,	create_time,	update_time
+	</sql>
+
+	<resultMap type="Seat" id="baseMap">
+		<result column="id" property="id"/>
+		<result column="aid" property="aid"/>
+		<result column="seat" property="seat"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	</resultMap>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="baseMap" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_seat
+		 WHERE id = #{id}
+	</select>
+
+	<!-- 查询表中所有信息 -->
+	<select id="selectAllSeats" resultMap="baseMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_seat
+	</select>
+
+	<!-- 查询Map符合条件的全部信息  -->
+	<select id="selectSeatsCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_seat
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 查询Map符合条件的分页信息  -->
+	<select id="selectSeatsPerPageByCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_seat
+	<!-- 条件自己写  -->
+		 limit ${start},#{size}
+	</select>
+
+	<!-- 查询所有获得记录条数 -->
+	<select id="selectSeatCount" resultType="java.lang.Integer">
+		 SELECT
+		 count(1)
+		 FROM t_seat
+	</select>
+
+	<!-- 查询Map符合条件记录条数 -->
+	<select id="selectSeatsCountByCondition" resultType="java.lang.Integer"  parameterType="map" >
+		 SELECT
+		 count(1)
+		 FROM t_seat
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 根据Bean条件查询匹配信息 -->
+	<select id="selectSeatsByCondition" resultType="Seat" parameterType="Seat">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_seat
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="aid != null">
+				 and  aid = #{aid}
+			</if>
+			<if test="seat != null">
+				 and  seat = #{seat}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+		 </where> 
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		 DELETE FROM t_seat
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 删除：根据传入的对象内容，条件删除  -->
+	<delete id="deleteByCondition" parameterType="Seat">
+		 DELETE FROM t_seat
+		 <where> 
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="aid != null">
+				 and  aid = #{aid}
+			</if>
+			<if test="seat != null">
+				 and  seat = #{seat}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+		 </where> 
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="Seat">
+		 INSERT INTO t_seat
+ 		(id,aid,seat,create_time,update_time) 
+		 VALUES 
+ 		(#{id},#{aid},#{seat},#{createTime},#{updateTime}) 
+	</insert>
+
+	<!-- 批量添加
+		https://blog.csdn.net/chang100111/article/details/115664432
+	-->
+	<insert id="insertList" parameterType="list">
+		 INSERT INTO t_seat
+ 		(id,aid,seat,create_time,update_time)
+		 VALUES
+		<foreach collection ="list" item="seat" separator =",">
+			(null,#{seat.aid},#{seat.seat},now(),now())
+		</foreach >
+
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="Seat">
+		 INSERT INTO t_seat
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="aid != null">
+				 aid,
+			</if>
+			<if test="seat != null">
+				 seat,
+			</if>
+			<if test="createTime != null">
+				 create_time,
+			</if>
+			<if test="updateTime != null">
+				 update_time,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="aid!=null">
+				 #{aid},
+			</if>
+			<if test="seat!=null">
+				 #{seat},
+			</if>
+			<if test="createTime!=null">
+				 #{createTime},
+			</if>
+			<if test="updateTime!=null">
+				 #{updateTime},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="Seat">
+		 UPDATE t_seat
+ 		 <set> 
+			<if test="aid != null">
+				 aid = #{aid},
+			</if>
+			<if test="seat != null">
+				 seat = #{seat},
+			</if>
+			<if test="createTime != null">
+				 create_time = #{createTime},
+			</if>
+			<if test="updateTime != null">
+				 update_time = #{updateTime},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="Seat">
+		 UPDATE t_seat
+		 SET 
+			 aid = #{aid},
+			 seat = #{seat},
+			 create_time = #{createTime},
+			 update_time = #{updateTime}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

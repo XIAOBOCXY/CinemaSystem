@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>多文件上传</h2>
+<!-- enctype="multipart/form-data" 文件上传的类型必须是这个类型 -->
+<form action="/api/poster/upload" method="post" enctype="multipart/form-data">
+    标题：<input type="text" name="title" value="张三" placeholder="请输入标题"/><br />
+    对应的电影：<select id="filmId" name="fid">
+    <option value="0">----------请选择-----------</option>
+</select><br />
+    轮播图片（1）：<input type="file" name="file" id="filePoster" onchange="changeImage()"/><img src="images/1.jpg" width=0"200" id="imgShow" title="显示缩略图" alt="显示缩略图" /><br />
+    <input type="submit" value="提交"/><br/>
+    <input type="button" value="aaaa" id="btnTest"/>
+</form>
+<hr />
+<script src="js/jquery.min.js"></script>
+<script>
+    $(function () {
+        $("#btnTest").click(function () {
+            alert("点击button");
+        });
+    });
+    //全部都是原生的js写法
+    function changeImage() {
+        var img = document.getElementById("imgShow");
+        var file1 = document.getElementById("filePoster");
+
+        var filePath = file1.files[0];
+        var reader = new FileReader(filePath);
+        reader.readAsDataURL(filePath);
+        reader.onload=function (ev) {
+            img.src=reader.result;
+        }
+    }
+</script>
+</body>
+</html>

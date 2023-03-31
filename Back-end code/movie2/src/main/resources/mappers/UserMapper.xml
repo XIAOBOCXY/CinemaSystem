@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movie2.mapper.UserMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+	id,	username,	password,	slat,	slat_index,	avatar,	nickname,	email,	birthday,	gender,	info,	create_time,	update_time,	error_num,	status
+	</sql>
+
+	<resultMap type="User" id="baseMap">
+		<result column="id" property="id"/>
+		<result column="username" property="username"/>
+		<result column="password" property="password"/>
+		<result column="slat" property="slat"/>
+		<result column="slat_index" property="slatIndex"/>
+		<result column="avatar" property="avatar"/>
+		<result column="nickname" property="nickname"/>
+		<result column="email" property="email"/>
+		<result column="birthday" property="birthday"/>
+		<result column="gender" property="gender"/>
+		<result column="info" property="info"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="error_num" property="errorNum"/>
+		<result column="status" property="status"/>
+	</resultMap>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="baseMap" parameterType="java.lang.Integer">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_user
+		 WHERE id = #{id}
+	</select>
+
+	<!-- 查询表中所有信息 -->
+	<select id="selectAllUsers" resultMap="baseMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_user
+	</select>
+
+	<!-- 查询Map符合条件的全部信息  -->
+	<select id="selectUsersCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_user
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 查询Map符合条件的分页信息  -->
+	<select id="selectUsersPerPageByCondition" resultMap="baseMap" parameterType="map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_user
+	<!-- 条件自己写  -->
+		 limit ${start},#{size}
+	</select>
+
+	<!-- 查询所有获得记录条数 -->
+	<select id="selectUserCount" resultType="java.lang.Integer">
+		 SELECT
+		 count(1)
+		 FROM t_user
+	</select>
+
+	<!-- 查询Map符合条件记录条数 -->
+	<select id="selectUsersCountByCondition" resultType="java.lang.Integer"  parameterType="map" >
+		 SELECT
+		 count(1)
+		 FROM t_user
+	<!-- 条件自己写  -->
+	</select>
+
+	<!-- 根据Bean条件查询匹配信息 -->
+	<select id="selectUsersByCondition" resultType="User" parameterType="User">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_user
+		 <where>
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="username != null">
+				 and  username = #{username}
+			</if>
+			<if test="password != null">
+				 and  password = #{password}
+			</if>
+			<if test="slat != null">
+				 and  slat = #{slat}
+			</if>
+			<if test="slatIndex != null">
+				 and  slat_index = #{slatIndex}
+			</if>
+			<if test="avatar != null">
+				 and  avatar = #{avatar}
+			</if>
+			<if test="nickname != null">
+				 and  nickname = #{nickname}
+			</if>
+			<if test="email != null">
+				 and  email = #{email}
+			</if>
+			<if test="birthday != null">
+				 and  birthday = #{birthday}
+			</if>
+			<if test="gender != null">
+				 and  gender = #{gender}
+			</if>
+			<if test="info != null">
+				 and  info = #{info}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+			<if test="errorNum != null">
+				 and  error_num = #{errorNum}
+			</if>
+			<if test="status != null">
+				 and  status = #{status}
+			</if>
+		 </where>
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		 DELETE FROM t_user
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 删除：根据传入的对象内容，条件删除  -->
+	<delete id="deleteByCondition" parameterType="User">
+		 DELETE FROM t_user
+		 <where>
+			<if test="id != null">
+				 and  id = #{id}
+			</if>
+			<if test="username != null">
+				 and  username = #{username}
+			</if>
+			<if test="password != null">
+				 and  password = #{password}
+			</if>
+			<if test="slat != null">
+				 and  slat = #{slat}
+			</if>
+			<if test="slatIndex != null">
+				 and  slat_index = #{slatIndex}
+			</if>
+			<if test="avatar != null">
+				 and  avatar = #{avatar}
+			</if>
+			<if test="nickname != null">
+				 and  nickname = #{nickname}
+			</if>
+			<if test="email != null">
+				 and  email = #{email}
+			</if>
+			<if test="birthday != null">
+				 and  birthday = #{birthday}
+			</if>
+			<if test="gender != null">
+				 and  gender = #{gender}
+			</if>
+			<if test="info != null">
+				 and  info = #{info}
+			</if>
+			<if test="createTime != null">
+				 and  create_time = #{createTime}
+			</if>
+			<if test="updateTime != null">
+				 and  update_time = #{updateTime}
+			</if>
+			<if test="errorNum != null">
+				 and  error_num = #{errorNum}
+			</if>
+			<if test="status != null">
+				 and  status = #{status}
+			</if>
+		 </where>
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="User">
+		 INSERT INTO t_user
+ 		(id,username,password,slat,slat_index,avatar,nickname,email,birthday,gender,info,create_time,update_time,error_num,status)
+		 VALUES
+ 		(#{id},#{username},#{password},#{slat},#{slatIndex},#{avatar},#{nickname},#{email},#{birthday},#{gender},#{info},#{createTime},#{updateTime},#{errorNum},#{status})
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="User">
+		 INSERT INTO t_user
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null">
+				 id,
+			</if>
+			<if test="username != null">
+				 username,
+			</if>
+			<if test="password != null">
+				 password,
+			</if>
+			<if test="slat != null">
+				 slat,
+			</if>
+			<if test="slatIndex != null">
+				 slat_index,
+			</if>
+			<if test="avatar != null">
+				 avatar,
+			</if>
+			<if test="nickname != null">
+				 nickname,
+			</if>
+			<if test="email != null">
+				 email,
+			</if>
+			<if test="birthday != null">
+				 birthday,
+			</if>
+			<if test="gender != null">
+				 gender,
+			</if>
+			<if test="info != null">
+				 info,
+			</if>
+			<if test="createTime != null">
+				 create_time,
+			</if>
+			<if test="updateTime != null">
+				 update_time,
+			</if>
+			<if test="errorNum != null">
+				 error_num,
+			</if>
+			<if test="status != null">
+				 status,
+			</if>
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id!=null">
+				 #{id},
+			</if>
+			<if test="username!=null">
+				 #{username},
+			</if>
+			<if test="password!=null">
+				 #{password},
+			</if>
+			<if test="slat!=null">
+				 #{slat},
+			</if>
+			<if test="slatIndex!=null">
+				 #{slatIndex},
+			</if>
+			<if test="avatar!=null">
+				 #{avatar},
+			</if>
+			<if test="nickname!=null">
+				 #{nickname},
+			</if>
+			<if test="email!=null">
+				 #{email},
+			</if>
+			<if test="birthday!=null">
+				 #{birthday},
+			</if>
+			<if test="gender!=null">
+				 #{gender},
+			</if>
+			<if test="info!=null">
+				 #{info},
+			</if>
+			<if test="createTime!=null">
+				 #{createTime},
+			</if>
+			<if test="updateTime!=null">
+				 #{updateTime},
+			</if>
+			<if test="errorNum!=null">
+				 #{errorNum},
+			</if>
+			<if test="status!=null">
+				 #{status},
+			</if>
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="User">
+		 UPDATE t_user
+ 		 <set>
+			<if test="username != null">
+				 username = #{username},
+			</if>
+			<if test="password != null">
+				 password = #{password},
+			</if>
+			<if test="slat != null">
+				 slat = #{slat},
+			</if>
+			<if test="slatIndex != null">
+				 slat_index = #{slatIndex},
+			</if>
+			<if test="avatar != null">
+				 avatar = #{avatar},
+			</if>
+			<if test="nickname != null">
+				 nickname = #{nickname},
+			</if>
+			<if test="email != null">
+				 email = #{email},
+			</if>
+			<if test="birthday != null">
+				 birthday = #{birthday},
+			</if>
+			<if test="gender != null">
+				 gender = #{gender},
+			</if>
+			<if test="info != null">
+				 info = #{info},
+			</if>
+			<if test="createTime != null">
+				 create_time = #{createTime},
+			</if>
+			<if test="updateTime != null">
+				 update_time = #{updateTime},
+			</if>
+			<if test="errorNum != null">
+				 error_num = #{errorNum},
+			</if>
+			<if test="status != null">
+				 status = #{status},
+			</if>
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="User">
+		 UPDATE t_user
+		 SET
+			 username = #{username},
+			 password = #{password},
+			 slat = #{slat},
+			 slat_index = #{slatIndex},
+			 avatar = #{avatar},
+			 nickname = #{nickname},
+			 email = #{email},
+			 birthday = #{birthday},
+			 gender = #{gender},
+			 info = #{info},
+			 create_time = #{createTime},
+			 update_time = #{updateTime},
+			 error_num = #{errorNum},
+			 status = #{status}
+		 WHERE id = #{id}
+	</update>
+
+</mapper>

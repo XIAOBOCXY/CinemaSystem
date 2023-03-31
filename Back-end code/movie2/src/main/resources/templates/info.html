@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>结果</title>
+</head>
+<body>
+<h3 th:text="${msg}">这是标签的内容</h3>
+<h3 th:utext="${msg}">这是标签的内容</h3>
+<h4 th:text="#{neuedu.thymeleaf.index.name}">国际化</h4>
+<!-- Unnamed (矩形) -->
+<div id="u1093" class="ax_default label">
+    <div id="u1093_div" class=""></div>
+    <div id="u1093_text" class="text ">
+        <p th:object="${user123}">
+            <span th:text="*{nickname}">admin</span>
+            <span th:text="${'管理员'}" th:if="*{errorNum} == 5 ">admin</span>
+            <span th:text="${'客服'}" th:if="*{errorNum} == 10 ">admin</span>
+        </p>
+    </div>
+</div>
+</body>
+</html>
